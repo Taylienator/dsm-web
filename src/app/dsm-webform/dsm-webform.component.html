@@ -1,0 +1,93 @@
+<div class="web-service-manager-container">
+    <header class="azure-blue-header">
+      <h1>Web Service Manager</h1>
+    </header>
+
+<form [formGroup]="UserCredentials" (ngSubmit)="onSubmit()" class="user-credentials-form">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>General Request</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field appearance="outline">
+                <mat-label>Request On Behalf Of</mat-label>
+                <mat-select formControlName="requestUser">
+                  <mat-option value="">Select an option</mat-option>
+                  <mat-option value="self">Fuqua, Charles S CTR DTIC ITS (USA)</mat-option>
+                  <mat-option value="other">Lake, Taylor S CTR DTIC ITS (USA)</mat-option>
+                  <mat-option value="other">Gould, Jennifer S CIV DTIC-P ITS (USA)</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <ng-container *ngIf="UserCredentials.get('requestUser')?.value === 'other'">
+                <mat-form-field appearance="outline">
+                  <mat-label>Other Person's Name</mat-label>
+                  <input matInput formControlName="otherPersonName" placeholder="Enter the other person's name">
+                </mat-form-field>
+              </ng-container>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Summary</mat-label>
+                <input matInput formControlName="summary" placeholder="Enter a summary">
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Description (optional)</mat-label>
+                <textarea matInput formControlName="description" placeholder="Enter a description" rows="4"></textarea>
+              </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Due Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dueDate" placeholder="Choose a date">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Location</mat-label>
+                <input matInput formControlName="location" placeholder="Enter your location">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>External Customer Request Type (optional)</mat-label>
+                <mat-select formControlName="externalRequestType">
+                  <mat-option value="">Select an option</mat-option>
+                  <mat-option value="self">General Reference Questions</mat-option>
+                  <mat-option value="other">Document Search</mat-option>
+                  <mat-option value="other">Document Access</mat-option>
+                  <mat-option value="other">Search Issues/Assistance</mat-option>
+                  <mat-option value="other">Legal Request</mat-option>
+                  <mat-option value="other">Regs/Standards/Publications</mat-option>
+                  <mat-option value="other">Distribution Statement Access</mat-option>
+                  <mat-option value="other">Troubleshooting/Export Control/Classified Access/Sponsorship</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+            <div class="file-upload" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)">
+                <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
+                <button mat-stroked-button type="button" (click)="fileInput.click()">
+                    <mat-icon>attach_file</mat-icon>
+                    Choose File
+                </button>
+                <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
+                <p>or drag and drop files here</p>
+            </div>
+
+            <div *ngIf="filePreview">
+                <h4>File Preview:</h4>
+                <div [innerHTML]="filePreview"></div>
+            </div>
+
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!UserCredentials.valid">Submit</button>
+        </mat-card-actions>
+        <mat-card-footer>
+            <mat-progress-bar mode="determinate" [value]="formProgress"></mat-progress-bar>
+        </mat-card-footer>
+    </mat-card>
+</form>
+</div>
