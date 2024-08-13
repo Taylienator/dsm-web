@@ -1,4 +1,4 @@
-# dsm-web2.0
+# dsm-web
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.683tech.dev/tjlake/dsm-web2.0.git
+git remote add origin https://gitlab.com/taylienz/dsm-web.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.683tech.dev/tjlake/dsm-web2.0/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/taylienz/dsm-web/-/settings/integrations)
 
 ## Collaborate with your team
 
