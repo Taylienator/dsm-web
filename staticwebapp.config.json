@@ -1,8 +1,6 @@
 {
-    "platform": {
-      "apiRuntime": "node:18"
-    },
-    "buildProperties": {
-      "nodeVersion": "18"
-    }
+    "output_location": "dist/dsm-web",
+    "node_version": "18.x",
+    "skip_build": false,
+    "build_command": "npm run build -- --prod"
   }
