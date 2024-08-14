@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 DSM-Web
 DSM-Web is a front-end application tool created with Angular 18. It provides functionality to handle form submissions and file uploads, sending data to the backend.
 Project Description
@@ -63,3 +64,7 @@ git branch -M main
 git push -uf origin main
 Contributing
 Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
+=======
+# dsm-web
+Angular Built Service Manager Web App to handle forms using reactive forms and upload documents
+>>>>>>> 3e4ae43e27e41b1b63e8f97d2658ad3d8cfb3f3b
