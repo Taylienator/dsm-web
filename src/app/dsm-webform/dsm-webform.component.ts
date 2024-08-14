@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dsm-webform',
@@ -28,8 +29,12 @@ import { MatSelectModule } from '@angular/material/select';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule
-  ]
+  ],
+
 })
+
+@Injectable({providedIn: 'root'})
+
 export class DsmWebformComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef = new ElementRef({});
 
@@ -40,7 +45,7 @@ export class DsmWebformComponent implements OnInit {
   filePreview: string = '';
   fileType: string = '';
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit() {
     this.initForm();
@@ -53,6 +58,7 @@ export class DsmWebformComponent implements OnInit {
       description: [''],
       dueDate: [null],
       externalRequestType: [''],
+      location: [''],
       otherPersonName: [''],
     });
 
@@ -124,21 +130,38 @@ export class DsmWebformComponent implements OnInit {
     if (this.UserCredentials.valid) {
       const formData = new FormData();
       Object.keys(this.UserCredentials.value).forEach(key => {
-        formData.append(key, this.UserCredentials.value[key]);
+        console.log(key, " what are the keys being generated?");
+        let value = this.UserCredentials.value[key];
+        if (value !== null && value !== undefined) {
+          if (key === 'dueDate' && value instanceof Date) {
+            value = value.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+          }
+          formData.append(key, value);
+        }
       });
       if (this.selectedFile) {
         formData.append('file', this.selectedFile, this.selectedFile.name);
       }
-      console.log('Form Data:', formData);
 
-      // Log the contents of formData
-      formData.forEach((value, key) => {
-        console.log(key, value);
+      console.log("Form data being sent:", formData);
+
+      this.http.post('http://localhost:8080/api/submissions', formData).subscribe({
+        next: (response) => {
+          console.log('Submission successful', response);
+          this.resetForm();
+          // Show success message to user
+        },
+        error: (error) => {
+          console.error('Submission failed', error);
+          // Show error message to user
+        },
+        complete: () => {
+          console.log('Submission process completed');
+        }
       });
-      this.resetForm();
-      // Here you would typically send the formData to your backend
     }
   }
+
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
